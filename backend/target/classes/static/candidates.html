@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Sourcing - NexaHire Enterprise ATS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">N</div>
+        <div class="brand-text">Nexa<span>Hire</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <div class="user-mini">
+          <div class="avatar" id="user-initials">U</div>
+          <div style="flex:1;overflow:hidden;">
+            <div class="text-sm text-bold" id="user-full-name">User Name</div>
+            <span class="badge badge-primary text-xs" id="user-role-badge">ROLE</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <h3>Candidate Sourcing &amp; Talent Pool</h3>
+        <button class="btn btn-secondary btn-sm" onclick="handleLogout()">Sign Out</button>
+      </header>
+
+      <div class="page-body">
+        <!-- Search bar -->
+        <div class="card mb-6" style="padding:1rem;">
+          <div class="grid grid-3 gap-3 items-center">
+            <div style="grid-column: span 2;">
+              <input type="text" id="candidate-search-input" class="form-control" placeholder="Search by candidate name, skill keyword (Java, React, AWS), or location...">
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-primary w-full" onclick="loadCandidates(0)">Search Talent</button>
+              <button class="btn btn-secondary" onclick="resetSearch()">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Candidates List -->
+        <div id="candidates-container" class="grid grid-2 gap-4">
+          <div class="text-center p-6 text-muted">Searching talent pool...</div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-between items-center mt-6" id="pagination-controls" style="display:none;">
+          <button class="btn btn-secondary btn-sm" id="btn-prev" onclick="changePage(-1)">&larr; Previous</button>
+          <span class="text-sm text-muted" id="page-indicator">Page 1 of 1</span>
+          <button class="btn btn-secondary btn-sm" id="btn-next" onclick="changePage(1)">Next &rarr;</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Candidate Details Modal -->
+  <div id="candidate-modal" class="modal-backdrop">
+    <div class="modal" style="max-width:700px;">
+      <div class="modal-header">
+        <h4>Candidate Profile Dossier</h4>
+        <button class="btn-icon btn-secondary" onclick="closeModal('candidate-modal')">&times;</button>
+      </div>
+      <div class="modal-body" id="candidate-modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('candidate-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/candidates.js"></script>
+</body>
+</html>

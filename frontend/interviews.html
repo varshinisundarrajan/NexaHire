@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interviews & Feedback - NexaHire Enterprise ATS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">N</div>
+        <div class="brand-text">Nexa<span>Hire</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <div class="user-mini">
+          <div class="avatar" id="user-initials">U</div>
+          <div style="flex:1;overflow:hidden;">
+            <div class="text-sm text-bold" id="user-full-name">User Name</div>
+            <span class="badge badge-primary text-xs" id="user-role-badge">ROLE</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <h3>Interview Rounds &amp; Scorecards</h3>
+        <div class="flex items-center gap-3">
+          <button id="btn-schedule" class="btn btn-primary btn-sm" style="display:none;" onclick="openScheduleModal()">
+            + Schedule Interview
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="handleLogout()">Sign Out</button>
+        </div>
+      </header>
+
+      <div class="page-body">
+        <div class="card mb-6">
+          <div class="card-header">
+            <div>
+              <h3>Interview Schedule</h3>
+              <p class="text-xs text-muted" id="interview-subtext">Manage upcoming panel evaluations, join meeting rooms, and record scorecards</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadInterviews()">Refresh</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Candidate</th>
+                  <th>Position</th>
+                  <th>Date &amp; Time</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Rating &amp; Recommendation</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="interviews-table-body">
+                <tr><td colspan="7" class="text-center p-6 text-muted">Loading scheduled interview rounds...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Schedule Interview Modal -->
+  <div id="schedule-modal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h4>Schedule Candidate Interview</h4>
+        <button class="btn-icon btn-secondary" onclick="closeModal('schedule-modal')">&times;</button>
+      </div>
+      <form id="schedule-form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="schedule-app-id">Select Applicant &amp; Requisition</label>
+            <select id="schedule-app-id" class="form-control" required>
+              <option value="">Choose shortlisted applicant...</option>
+            </select>
+          </div>
+
+          <div class="grid grid-2 gap-3">
+            <div class="form-group">
+              <label class="form-label" for="schedule-date">Interview Date</label>
+              <input type="date" id="schedule-date" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="schedule-time">Interview Time</label>
+              <input type="time" id="schedule-time" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="grid grid-2 gap-3">
+            <div class="form-group">
+              <label class="form-label" for="schedule-type">Interview Format</label>
+              <select id="schedule-type" class="form-control">
+                <option value="VIDEO">Video Call (Google Meet / Zoom)</option>
+                <option value="IN_PERSON">In-Person Onsite</option>
+                <option value="PHONE">Phone Screen</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="schedule-link">Meeting Link / Location</label>
+              <input type="text" id="schedule-link" class="form-control" placeholder="https://meet.google.com/xxx-xxxx-xxx">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('schedule-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-schedule">Confirm &amp; Notify Candidate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Feedback & Rating Scorecard Modal -->
+  <div id="feedback-modal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h4>Interview Evaluation Scorecard</h4>
+        <button class="btn-icon btn-secondary" onclick="closeModal('feedback-modal')">&times;</button>
+      </div>
+      <form id="feedback-form">
+        <input type="hidden" id="feedback-interview-id">
+        <div class="modal-body">
+          <div id="feedback-candidate-summary" class="card mb-4" style="background:var(--slate-50);padding:1rem;"></div>
+
+          <div class="grid grid-2 gap-3">
+            <div class="form-group">
+              <label class="form-label" for="feedback-rating">Technical &amp; Culture Rating (1 to 5 Stars)</label>
+              <select id="feedback-rating" class="form-control" required>
+                <option value="5">⭐⭐⭐⭐⭐ 5 - Exceptional / Strong Hire</option>
+                <option value="4" selected>⭐⭐⭐⭐ 4 - Good / Hire</option>
+                <option value="3">⭐⭐⭐ 3 - Borderline / Neutral</option>
+                <option value="2">⭐⭐ 2 - Weak / Below Standard</option>
+                <option value="1">⭐ 1 - Not Recommended</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="feedback-recommendation">Recommendation</label>
+              <select id="feedback-recommendation" class="form-control">
+                <option value="HIRE">HIRE</option>
+                <option value="HOLD">HOLD</option>
+                <option value="REJECT">REJECT</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="feedback-text">Evaluation Comments &amp; Notes</label>
+            <textarea id="feedback-text" class="form-control" rows="4" required placeholder="Detail the candidate's answers, problem solving approach, communication, and key strengths..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('feedback-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-feedback">Submit Scorecard</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/interviews.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Governance & Audit Logs - NexaHire Enterprise</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .tab-nav {
+      display: flex;
+      gap: 1rem;
+      border-bottom: 2px solid var(--slate-200);
+      margin-bottom: 1.5rem;
+    }
+    .tab-link {
+      padding: 0.6rem 0.2rem;
+      font-weight: 600;
+      color: var(--slate-500);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+    }
+    .tab-link.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">N</div>
+        <div class="brand-text">Nexa<span>Hire</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <div class="user-mini">
+          <div class="avatar" id="user-initials">U</div>
+          <div style="flex:1;overflow:hidden;">
+            <div class="text-sm text-bold" id="user-full-name">User Name</div>
+            <span class="badge badge-primary text-xs" id="user-role-badge">ROLE</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <h3>User Management &amp; System Audit</h3>
+        <button class="btn btn-secondary btn-sm" onclick="handleLogout()">Sign Out</button>
+      </header>
+
+      <div class="page-body">
+        <div class="tab-nav">
+          <div class="tab-link active" id="tab-users" onclick="switchAdminTab('users')">System Accounts &amp; Roles</div>
+          <div class="tab-link" id="tab-audit" onclick="switchAdminTab('audit')">Enterprise Audit Logs</div>
+        </div>
+
+        <!-- Users Section -->
+        <div id="users-section">
+          <div class="card mb-6">
+            <div class="card-header">
+              <div>
+                <h3>Registered System Users</h3>
+                <p class="text-xs text-muted">Manage roles, update statuses, and enforce platform access controls</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="loadUsers()">Refresh</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>User / Full Name</th>
+                    <th>Email Address</th>
+                    <th>Role Assigned</th>
+                    <th>Account Status</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="users-table-body">
+                  <tr><td colspan="6" class="text-center p-6 text-muted">Loading user accounts...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audit Logs Section -->
+        <div id="audit-section" style="display:none;">
+          <div class="card mb-6">
+            <div class="card-header">
+              <div>
+                <h3>System Activity &amp; Audit Trail</h3>
+                <p class="text-xs text-muted">Immutable log of security events, requisition creations, and status modifications</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="loadAuditLogs()">Refresh Logs</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                    <th>Entity</th>
+                    <th>Operator</th>
+                    <th>IP Address</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-table-body">
+                  <tr><td colspan="6" class="text-center p-6 text-muted">Loading audit entries...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Edit User Modal -->
+  <div id="edit-user-modal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h4>Modify User Role &amp; Status</h4>
+        <button class="btn-icon btn-secondary" onclick="closeModal('edit-user-modal')">&times;</button>
+      </div>
+      <form id="edit-user-form">
+        <input type="hidden" id="edit-user-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="edit-full-name">Full Name</label>
+            <input type="text" id="edit-full-name" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-phone">Phone</label>
+            <input type="text" id="edit-phone" class="form-control">
+          </div>
+          <div class="grid grid-2 gap-3">
+            <div class="form-group">
+              <label class="form-label" for="edit-role">System Role</label>
+              <select id="edit-role" class="form-control">
+                <option value="ROLE_ADMIN">ADMIN (Full Access)</option>
+                <option value="ROLE_HR_MANAGER">HR MANAGER (Strategic HR)</option>
+                <option value="ROLE_RECRUITER">RECRUITER (Pipeline & Sourcing)</option>
+                <option value="ROLE_CANDIDATE">CANDIDATE (Applicant)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="edit-status">Account Status</label>
+              <select id="edit-status" class="form-control">
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="INACTIVE">INACTIVE</option>
+                <option value="SUSPENDED">SUSPENDED</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('edit-user-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/users.js"></script>
+</body>
+</html>

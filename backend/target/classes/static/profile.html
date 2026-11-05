@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile &amp; Resume - NexaHire Enterprise</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .upload-dropzone {
+      border: 2px dashed var(--slate-300);
+      background-color: var(--slate-50);
+      border-radius: var(--radius-md);
+      padding: 2.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .upload-dropzone:hover, .upload-dropzone.dragover {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">N</div>
+        <div class="brand-text">Nexa<span>Hire</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <div class="user-mini">
+          <div class="avatar" id="user-initials">U</div>
+          <div style="flex:1;overflow:hidden;">
+            <div class="text-sm text-bold" id="user-full-name">User Name</div>
+            <span class="badge badge-primary text-xs" id="user-role-badge">ROLE</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <h3>Candidate Profile &amp; Resume Parsing</h3>
+        <button class="btn btn-secondary btn-sm" onclick="handleLogout()">Sign Out</button>
+      </header>
+
+      <div class="page-body">
+        <div class="grid grid-3 gap-6">
+          <!-- Left Column: Profile Info Form (2-span) -->
+          <div style="grid-column: span 2;" class="card">
+            <div class="card-header">
+              <div>
+                <h3>Professional Profile Information</h3>
+                <p class="text-xs text-muted">Keep your skills and career highlights up to date for instant keyword scoring</p>
+              </div>
+            </div>
+
+            <form id="profile-form">
+              <div class="grid grid-2 gap-3">
+                <div class="form-group">
+                  <label class="form-label" for="profile-name">Full Name</label>
+                  <input type="text" id="profile-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="profile-phone">Phone Number</label>
+                  <input type="tel" id="profile-phone" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="profile-headline">Professional Headline</label>
+                <input type="text" id="profile-headline" class="form-control" placeholder="e.g. Senior Java Full Stack Engineer | Microservices & React">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="profile-summary">Career Summary / Bio</label>
+                <textarea id="profile-summary" class="form-control" rows="3" placeholder="Brief summary of your career accomplishments, technologies, and interests..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="profile-skills">Core Technical Skills (Comma-separated)</label>
+                <input type="text" id="profile-skills" class="form-control" placeholder="Java, Spring Boot, MySQL, REST API, React, Docker, AWS">
+                <div class="text-xs text-muted mt-1">Used by our keyword engine to automatically score your fit for job applications.</div>
+              </div>
+
+              <div class="grid grid-3 gap-3">
+                <div class="form-group">
+                  <label class="form-label" for="profile-exp">Experience (Years)</label>
+                  <input type="number" step="0.5" id="profile-exp" class="form-control" placeholder="5.0">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="profile-current-sal">Current Salary ($)</label>
+                  <input type="number" id="profile-current-sal" class="form-control" placeholder="90000">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="profile-expected-sal">Expected Salary ($)</label>
+                  <input type="number" id="profile-expected-sal" class="form-control" placeholder="115000">
+                </div>
+              </div>
+
+              <div class="grid grid-2 gap-3">
+                <div class="form-group">
+                  <label class="form-label" for="profile-education">Education / Degree</label>
+                  <input type="text" id="profile-education" class="form-control" placeholder="B.S. in Computer Science">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="profile-location">Current Location</label>
+                  <input type="text" id="profile-location" class="form-control" placeholder="San Francisco, CA (or Remote)">
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" id="btn-save-profile">
+                Save Profile Changes
+              </button>
+            </form>
+          </div>
+
+          <!-- Right Column: Resume Upload & History -->
+          <div class="flex flex-col gap-6">
+            <div class="card">
+              <div class="card-header">
+                <h4>Upload Resume Document</h4>
+                <span class="badge badge-primary">PDF / DOCX</span>
+              </div>
+
+              <div class="upload-dropzone" id="dropzone" onclick="document.getElementById('resume-file-input').click()">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" class="mb-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <div class="text-bold text-sm">Click to choose or drag &amp; drop resume</div>
+                <div class="text-xs text-muted mt-1">Accepts PDF, DOCX, TXT (Max 10MB)</div>
+                <input type="file" id="resume-file-input" style="display:none;" accept=".pdf,.docx,.doc,.txt" onchange="handleFileSelect(event)">
+              </div>
+
+              <div id="upload-progress" class="mt-3 text-center text-xs text-muted" style="display:none;">
+                Uploading &amp; analyzing keywords...
+              </div>
+            </div>
+
+            <!-- Resumes List -->
+            <div class="card">
+              <div class="card-header">
+                <h4>Resume Archive</h4>
+                <span class="badge badge-neutral" id="resume-count-badge">0</span>
+              </div>
+              <div id="resumes-list" class="flex flex-col gap-2">
+                <p class="text-xs text-muted text-center py-4">No resumes on file.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

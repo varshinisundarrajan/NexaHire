@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - NexaHire Enterprise ATS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="app-sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">N</div>
+        <div class="brand-text">Nexa<span>Hire</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <!-- Rendered dynamically by renderAppNavigation -->
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-mini">
+          <div class="avatar" id="user-initials">U</div>
+          <div style="flex:1;overflow:hidden;">
+            <div class="text-sm text-bold" id="user-full-name" style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">User Name</div>
+            <span class="badge badge-primary text-xs" id="user-role-badge">ROLE</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="flex items-center gap-3">
+          <button class="btn-icon btn-secondary" style="display:none;" id="sidebar-toggle">&#9776;</button>
+          <h3 id="page-title">Enterprise Dashboard</h3>
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="btn btn-secondary btn-sm" onclick="handleLogout()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Sign Out
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <div class="page-body" id="dashboard-content">
+        <div class="flex items-center justify-center p-6">
+          <div class="text-muted">Loading your recruitment metrics...</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

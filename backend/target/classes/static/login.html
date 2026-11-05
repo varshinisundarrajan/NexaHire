@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - NexaHire Enterprise</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--slate-900) 0%, var(--navy-900) 100%);
+      padding: 2rem;
+    }
+    .auth-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      width: 100%;
+      max-width: 480px;
+      padding: 2.5rem;
+    }
+    .quick-role-btn {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
+      border: 1px solid var(--slate-200);
+      background: var(--slate-50);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--slate-700);
+      transition: all var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .quick-role-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="brand-logo">N</div>
+        <div>
+          <div class="brand-text" style="color:var(--navy-900);">Nexa<span>Hire</span></div>
+          <div class="text-xs text-muted">Enterprise Recruitment System</div>
+        </div>
+      </div>
+
+      <h2 style="font-size:1.5rem;margin-bottom:0.5rem;">Sign In</h2>
+      <p class="text-sm text-muted mb-4">Enter your credentials to access your recruitment portal</p>
+
+      <!-- Quick Fill Role Buttons -->
+      <div style="background-color:var(--slate-50);border:1px dashed var(--slate-300);border-radius:var(--radius-md);padding:0.75rem;margin-bottom:1.5rem;">
+        <div class="text-xs text-muted mb-2 text-bold">QUICK DEMO LOGIN (ONE-CLICK FILL):</div>
+        <div class="grid grid-4 gap-2">
+          <button type="button" class="quick-role-btn" onclick="fillDemo('admin@nexahire.com', 'Admin@123')">
+            <span>🛡️ Admin</span>
+            <span class="text-xs text-muted">Alex Vance</span>
+          </button>
+          <button type="button" class="quick-role-btn" onclick="fillDemo('hr@nexahire.com', 'Hr@123')">
+            <span>👥 HR Lead</span>
+            <span class="text-xs text-muted">Sarah Jenkins</span>
+          </button>
+          <button type="button" class="quick-role-btn" onclick="fillDemo('recruiter@nexahire.com', 'Recruiter@123')">
+            <span>🎯 Recruiter</span>
+            <span class="text-xs text-muted">Marcus Brody</span>
+          </button>
+          <button type="button" class="quick-role-btn" onclick="fillDemo('candidate@nexahire.com', 'Candidate@123')">
+            <span>👤 Candidate</span>
+            <span class="text-xs text-muted">Varshini Sundar</span>
+          </button>
+        </div>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="usernameOrEmail">Email or Username</label>
+          <input type="text" id="usernameOrEmail" class="form-control" placeholder="e.g. recruiter@nexahire.com" required>
+        </div>
+
+        <div class="form-group">
+          <div class="flex justify-between items-center mb-1">
+            <label class="form-label" for="password" style="margin-bottom:0;">Password</label>
+            <a href="javascript:void(0)" onclick="openModal('forgot-modal')" class="text-xs">Forgot password?</a>
+          </div>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-primary w-full mt-2">
+          Sign In to NexaHire
+        </button>
+      </form>
+
+      <div class="mt-6 text-center text-sm text-muted">
+        Don't have an account? <a href="register.html" class="text-bold">Register as Candidate or Recruiter</a>
+      </div>
+      <div class="mt-2 text-center text-xs text-muted">
+        <a href="index.html">&larr; Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div id="forgot-modal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h4>Reset Password</h4>
+        <button class="btn-icon btn-secondary" onclick="closeModal('forgot-modal')">&times;</button>
+      </div>
+      <form id="forgot-form">
+        <div class="modal-body">
+          <p class="text-sm text-muted mb-4">Enter your registered email address and we'll generate a secure reset token.</p>
+          <div class="form-group">
+            <label class="form-label" for="forgot-email">Account Email</label>
+            <input type="email" id="forgot-email" class="form-control" placeholder="name@company.com" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('forgot-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send Reset Instructions</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    function fillDemo(email, pass) {
+      document.getElementById("usernameOrEmail").value = email;
+      document.getElementById("password").value = pass;
+      showToast(`Filled credentials for ${email}`, "info");
+    }
+
+    document.getElementById("login-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("submit-btn");
+      const usernameOrEmail = document.getElementById("usernameOrEmail").value.trim();
+      const password = document.getElementById("password").value;
+
+      btn.disabled = true;
+      btn.textContent = "Authenticating...";
+
+      try {
+        const res = await apiCall("/auth/login", {
+          method: "POST",
+          body: JSON.stringify({ usernameOrEmail, password })
+        });
+
+        if (res.success && res.data) {
+          setAuth(res.data);
+          showToast(`Welcome back, ${res.data.fullName}!`, "success");
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 800);
+        } else {
+          showToast(res.message || "Invalid credentials", "error");
+        }
+      } catch (err) {
+        showToast(err.message || "Failed to sign in. Please verify credentials.", "error");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Sign In to NexaHire";
+      }
+    });
+
+    document.getElementById("forgot-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("forgot-email").value.trim();
+      try {
+        const res = await apiCall("/auth/forgot-password", {
+          method: "POST",
+          body: JSON.stringify({ email })
+        });
+        showToast(res.message || "Reset link generated!", "success");
+        closeModal("forgot-modal");
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    });
+  </script>
+</body>
+</html>

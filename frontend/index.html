@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexaHire - Enterprise Recruitment & Applicant Tracking System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="landing-nav">
+    <div class="flex items-center gap-3">
+      <div class="brand-logo">N</div>
+      <div class="brand-text">Nexa<span>Hire</span></div>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="jobs.html" class="text-sm text-bold" style="color:#e2e8f0;">Explore Openings</a>
+      <a href="login.html" class="btn btn-secondary btn-sm">Sign In</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Next-Generation Talent Acquisition Platform
+    </div>
+    <h1 class="hero-title">
+      Streamline your hiring from <span>sourcing to offer</span> with intelligent precision.
+    </h1>
+    <p class="hero-subtitle">
+      NexaHire empowers modern talent teams with end-to-end recruitment pipelines, transparent resume keyword matching, structured interview scorecards, and multi-channel candidate tracking.
+    </p>
+    <div class="flex items-center justify-center gap-4">
+      <a href="register.html" class="btn btn-primary btn-lg">Start Hiring Free</a>
+      <a href="login.html" class="btn btn-secondary btn-lg">Explore Live Demo</a>
+    </div>
+
+    <!-- Quick Stats Bar -->
+    <div class="flex items-center justify-center gap-6 mt-6 flex-wrap" style="color:var(--slate-400);font-size:0.875rem;">
+      <div class="flex items-center gap-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Role-Based Access (Admin, HR, Recruiter, Candidate)
+      </div>
+      <div class="flex items-center gap-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Transparent Keyword Matching Engine
+      </div>
+      <div class="flex items-center gap-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Enterprise Audit Trails & Funnel Analytics
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Capabilities Section -->
+  <section class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon-box">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      </div>
+      <h3 class="mb-2">Multi-Stage ATS Pipeline</h3>
+      <p>Visual Kanban and tabular recruitment pipelines: Applied &rarr; Screening &rarr; Shortlisted &rarr; Interview &rarr; Selected / Rejected with one-click transitions.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon-box" style="background-color:var(--success-bg);color:var(--success);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
+      </div>
+      <h3 class="mb-2">Transparent Keyword Matching</h3>
+      <p>Real skill scoring engine calculates transparent percentage match between job requirements and applicant profile &amp; parsed resume text, highlighting matched vs missing skills.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon-box" style="background-color:var(--warning-bg);color:var(--warning);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <h3 class="mb-2">Interview &amp; Feedback Hub</h3>
+      <p>Coordinate video and in-person interviews, dispatch calendar invitations to candidates, and gather 5-star ratings with hire/reject recommendations.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon-box" style="background-color:var(--info-bg);color:var(--info);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <h3 class="mb-2">Recruitment Funnel Analytics</h3>
+      <p>Track candidate drop-off, conversion velocity at each hiring stage, department requisition breakdowns, and active job pipeline health.</p>
+    </div>
+  </section>
+
+  <!-- User Roles Showcase -->
+  <section style="background-color:#ffffff;padding:5rem 4rem;border-top:1px solid var(--slate-200);border-bottom:1px solid var(--slate-200);">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div style="text-align:center;max-width:700px;margin:0 auto 3rem;">
+        <span class="badge badge-primary mb-2">Designed for Every Stakeholder</span>
+        <h2>Four Specialized Enterprise Roles</h2>
+        <p class="mt-2">Tailored interfaces, strict permission boundaries, and dedicated workflows for each member of your recruitment ecosystem.</p>
+      </div>
+
+      <div class="grid grid-4 gap-4">
+        <div class="card">
+          <div class="badge badge-navy mb-2">Admin</div>
+          <h4 class="mb-2">Platform Governance</h4>
+          <p class="text-sm">Manage enterprise users, assign role access, monitor jobs, and inspect immutable system audit logs with IP tracking.</p>
+        </div>
+        <div class="card">
+          <div class="badge badge-primary mb-2">HR Manager</div>
+          <h4 class="mb-2">Strategic Oversight</h4>
+          <p class="text-sm">Monitor enterprise-wide hiring funnel health, department open headcount, and recruitment performance metrics.</p>
+        </div>
+        <div class="card">
+          <div class="badge badge-info mb-2">Recruiter</div>
+          <h4 class="mb-2">Execution &amp; Sourcing</h4>
+          <p class="text-sm">Create job requisitions, evaluate candidate match scores, advance pipeline stages, and schedule interview panels.</p>
+        </div>
+        <div class="card">
+          <div class="badge badge-success mb-2">Candidate</div>
+          <h4 class="mb-2">Seamless Application</h4>
+          <p class="text-sm">Search open positions, 1-click apply with automated resume keyword parsing, track real-time application status, and view interview invites.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background-color:var(--navy-900);color:var(--slate-400);padding:3rem 4rem;text-align:center;font-size:0.875rem;">
+    <p>&copy; 2026 NexaHire Enterprise Recruitment &amp; Applicant Tracking System. Built with Spring Boot, Java, MySQL, and Modern Vanilla JS.</p>
+  </footer>
+
+</body>
+</html>

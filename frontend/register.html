@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - NexaHire Enterprise</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--slate-900) 0%, var(--navy-900) 100%);
+      padding: 2rem;
+    }
+    .auth-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      width: 100%;
+      max-width: 580px;
+      padding: 2.5rem;
+    }
+    .role-toggle {
+      display: flex;
+      background-color: var(--slate-100);
+      padding: 0.25rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+    }
+    .role-toggle-btn {
+      flex: 1;
+      padding: 0.6rem;
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      color: var(--slate-600);
+      transition: all var(--transition-fast);
+    }
+    .role-toggle-btn.active {
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="brand-logo">N</div>
+        <div>
+          <div class="brand-text" style="color:var(--navy-900);">Nexa<span>Hire</span></div>
+          <div class="text-xs text-muted">Join the Enterprise Recruitment Network</div>
+        </div>
+      </div>
+
+      <h2 style="font-size:1.5rem;margin-bottom:0.5rem;">Create an Account</h2>
+      <p class="text-sm text-muted mb-4">Select your account type to begin</p>
+
+      <div class="role-toggle">
+        <button type="button" class="role-toggle-btn active" id="btn-candidate" onclick="selectRole('ROLE_CANDIDATE')">
+          👤 Candidate / Job Seeker
+        </button>
+        <button type="button" class="role-toggle-btn" id="btn-recruiter" onclick="selectRole('ROLE_RECRUITER')">
+          🎯 Recruiter / Hiring Team
+        </button>
+      </div>
+
+      <form id="register-form">
+        <input type="hidden" id="selected-role" value="ROLE_CANDIDATE">
+
+        <div class="grid grid-2 gap-3">
+          <div class="form-group">
+            <label class="form-label" for="fullName">Full Name</label>
+            <input type="text" id="fullName" class="form-control" placeholder="e.g. John Doe" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="username">Username</label>
+            <input type="text" id="username" class="form-control" placeholder="johndoe" required>
+          </div>
+        </div>
+
+        <div class="grid grid-2 gap-3">
+          <div class="form-group">
+            <label class="form-label" for="email">Work or Personal Email</label>
+            <input type="email" id="email" class="form-control" placeholder="john@example.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone Number</label>
+            <input type="tel" id="phone" class="form-control" placeholder="+1-555-0199">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Create Password (min. 6 characters)</label>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" minlength="6" required>
+        </div>
+
+        <!-- Candidate specific fields -->
+        <div id="candidate-fields">
+          <div class="form-group">
+            <label class="form-label" for="headline">Professional Headline</label>
+            <input type="text" id="headline" class="form-control" placeholder="e.g. Senior Java Full Stack Developer">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="skills">Skills (comma separated for keyword matching)</label>
+            <input type="text" id="skills" class="form-control" placeholder="e.g. Java, Spring Boot, MySQL, React, Docker">
+          </div>
+        </div>
+
+        <!-- Recruiter specific fields -->
+        <div id="recruiter-fields" style="display:none;">
+          <div class="grid grid-2 gap-3">
+            <div class="form-group">
+              <label class="form-label" for="department">Department</label>
+              <input type="text" id="department" class="form-control" placeholder="Engineering Recruitment">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="designation">Job Title / Designation</label>
+              <input type="text" id="designation" class="form-control" placeholder="Lead Talent Partner">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="companyName">Company / Organization</label>
+            <input type="text" id="companyName" class="form-control" placeholder="Acme Corp Global">
+          </div>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-primary w-full mt-2">
+          Create Account &amp; Access NexaHire
+        </button>
+      </form>
+
+      <div class="mt-6 text-center text-sm text-muted">
+        Already have an account? <a href="login.html" class="text-bold">Sign In here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    function selectRole(role) {
+      document.getElementById("selected-role").value = role;
+      const btnCandidate = document.getElementById("btn-candidate");
+      const btnRecruiter = document.getElementById("btn-recruiter");
+      const candidateFields = document.getElementById("candidate-fields");
+      const recruiterFields = document.getElementById("recruiter-fields");
+
+      if (role === "ROLE_CANDIDATE") {
+        btnCandidate.classList.add("active");
+        btnRecruiter.classList.remove("active");
+        candidateFields.style.display = "block";
+        recruiterFields.style.display = "none";
+      } else {
+        btnRecruiter.classList.add("active");
+        btnCandidate.classList.remove("active");
+        recruiterFields.style.display = "block";
+        candidateFields.style.display = "none";
+      }
+    }
+
+    document.getElementById("register-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("submit-btn");
+      btn.disabled = true;
+      btn.textContent = "Creating Account...";
+
+      const role = document.getElementById("selected-role").value;
+      const payload = {
+        fullName: document.getElementById("fullName").value.trim(),
+        username: document.getElementById("username").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        password: document.getElementById("password").value,
+        roleName: role
+      };
+
+      if (role === "ROLE_CANDIDATE") {
+        payload.headline = document.getElementById("headline").value.trim();
+        payload.skills = document.getElementById("skills").value.trim();
+      } else {
+        payload.department = document.getElementById("department").value.trim();
+        payload.designation = document.getElementById("designation").value.trim();
+        payload.companyName = document.getElementById("companyName").value.trim();
+      }
+
+      try {
+        const res = await apiCall("/auth/register", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+
+        if (res.success && res.data) {
+          setAuth(res.data);
+          showToast("Account created successfully! Redirecting...", "success");
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 900);
+        } else {
+          showToast(res.message || "Registration failed", "error");
+        }
+      } catch (err) {
+        showToast(err.message || "Registration failed. Please check inputs.", "error");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Create Account & Access NexaHire";
+      }
+    });
+  </script>
+</body>
+</html>

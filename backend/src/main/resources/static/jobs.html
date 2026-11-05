@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Openings - NexaHire Enterprise ATS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">N</div>
+        <div class="brand-text">Nexa<span>Hire</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <div class="user-mini">
+          <div class="avatar" id="user-initials">U</div>
+          <div style="flex:1;overflow:hidden;">
+            <div class="text-sm text-bold" id="user-full-name">User Name</div>
+            <span class="badge badge-primary text-xs" id="user-role-badge">ROLE</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar">
+        <h3>Job Openings &amp; Requisitions</h3>
+        <div class="flex items-center gap-3">
+          <button id="btn-post-job" class="btn btn-primary btn-sm" style="display:none;" onclick="openCreateJobModal()">
+            + Post New Opening
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="handleLogout()">Sign Out</button>
+        </div>
+      </header>
+
+      <div class="page-body">
+        <!-- Search & Filter Bar -->
+        <div class="card mb-6" style="padding:1rem;">
+          <div class="grid grid-4 gap-3">
+            <div class="form-group" style="margin-bottom:0;">
+              <input type="text" id="search-input" class="form-control" placeholder="Search by title, skills, location...">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <select id="dept-filter" class="form-control">
+                <option value="">All Departments</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Product & Design">Product &amp; Design</option>
+                <option value="Infrastructure">Infrastructure</option>
+                <option value="Product Management">Product Management</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <select id="type-filter" class="form-control">
+                <option value="">All Job Types</option>
+                <option value="FULL_TIME">Full Time</option>
+                <option value="PART_TIME">Part Time</option>
+                <option value="CONTRACT">Contract</option>
+                <option value="REMOTE">Remote</option>
+              </select>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-primary w-full" onclick="loadJobs(0)">Filter</button>
+              <button class="btn btn-secondary" onclick="resetFilters()">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Jobs Listing -->
+        <div id="jobs-container" class="flex flex-col gap-4">
+          <div class="text-center p-6 text-muted">Loading open requisitions...</div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-between items-center mt-6" id="pagination-controls" style="display:none;">
+          <button class="btn btn-secondary btn-sm" id="btn-prev" onclick="changePage(-1)">&larr; Previous</button>
+          <span class="text-sm text-muted" id="page-indicator">Page 1 of 1</span>
+          <button class="btn btn-secondary btn-sm" id="btn-next" onclick="changePage(1)">Next &rarr;</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Create / Edit Job Modal -->
+  <div id="job-modal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 id="job-modal-title">Create Job Opening</h4>
+        <button class="btn-icon btn-secondary" onclick="closeModal('job-modal')">&times;</button>
+      </div>
+      <form id="job-form">
+        <input type="hidden" id="job-id">
+        <div class="modal-body">
+          <div class="grid grid-2 gap-3">
+            <div class="form-group">
+              <label class="form-label" for="job-title">Job Title</label>
+              <input type="text" id="job-title" class="form-control" required placeholder="e.g. Senior Java Engineer">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="job-department">Department</label>
+              <input type="text" id="job-department" class="form-control" required placeholder="Engineering">
+            </div>
+          </div>
+
+          <div class="grid grid-2 gap-3">
+            <div class="form-group">
+              <label class="form-label" for="job-type">Job Type</label>
+              <select id="job-type" class="form-control">
+                <option value="FULL_TIME">Full Time</option>
+                <option value="PART_TIME">Part Time</option>
+                <option value="CONTRACT">Contract</option>
+                <option value="REMOTE">Remote</option>
+                <option value="INTERNSHIP">Internship</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="job-location">Location</label>
+              <input type="text" id="job-location" class="form-control" required placeholder="San Francisco, CA (or Remote)">
+            </div>
+          </div>
+
+          <div class="grid grid-4 gap-2">
+            <div class="form-group">
+              <label class="form-label">Min Exp (Yrs)</label>
+              <input type="number" id="job-exp-min" class="form-control" value="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Max Exp (Yrs)</label>
+              <input type="number" id="job-exp-max" class="form-control" value="10">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Salary Min ($)</label>
+              <input type="number" id="job-salary-min" class="form-control" placeholder="100000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Salary Max ($)</label>
+              <input type="number" id="job-salary-max" class="form-control" placeholder="140000">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="job-required-skills">Required Skills (Comma-separated for Keyword Matching)</label>
+            <input type="text" id="job-required-skills" class="form-control" required placeholder="Java, Spring Boot, MySQL, REST API">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="job-description">Job Description &amp; Responsibilities</label>
+            <textarea id="job-description" class="form-control" rows="4" required placeholder="Describe the day-to-day role and expectations..."></textarea>
+          </div>
+
+          <div class="grid grid-2 gap-3">
+            <div class="form-group">
+              <label class="form-label" for="job-status">Listing Status</label>
+              <select id="job-status" class="form-control">
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="CLOSED">CLOSED</option>
+                <option value="DRAFT">DRAFT</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="job-deadline">Application Deadline</label>
+              <input type="date" id="job-deadline" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('job-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-job">Save Opening</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Apply Job Modal for Candidates -->
+  <div id="apply-modal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 id="apply-modal-title">Apply for Position</h4>
+        <button class="btn-icon btn-secondary" onclick="closeModal('apply-modal')">&times;</button>
+      </div>
+      <form id="apply-form">
+        <input type="hidden" id="apply-job-id">
+        <div class="modal-body">
+          <div id="apply-job-info" class="card mb-4" style="background:var(--slate-50);padding:1rem;"></div>
+
+          <div class="form-group">
+            <label class="form-label" for="apply-cover-letter">Cover Letter / Note to Hiring Manager</label>
+            <textarea id="apply-cover-letter" class="form-control" rows="4" placeholder="Highlight why your skills make you a stellar match for this role..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Resume Attachment</label>
+            <div id="resume-status" class="text-sm text-muted mb-2">Using your active uploaded profile resume.</div>
+            <a href="profile.html" class="text-xs text-bold">Update or upload a new resume &rarr;</a>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('apply-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-apply">Submit Application</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/jobs.js"></script>
+</body>
+</html>

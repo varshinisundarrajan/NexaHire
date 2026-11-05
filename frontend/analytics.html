@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recruitment Funnel Analytics - NexaHire Enterprise</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .funnel-step {
+      position: relative;
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+    .funnel-bar-bg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background: var(--primary-light);
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+      z-index: 1;
+      opacity: 0.7;
+      transition: width 0.6s ease;
+    }
+    .funnel-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chart-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .chart-bar-label {
+      width: 160px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--slate-700);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .chart-bar-track {
+      flex: 1;
+      height: 24px;
+      background-color: var(--slate-100);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      position: relative;
+    }
+    .chart-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--navy-800), var(--primary));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 0.5rem;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      min-width: 28px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">N</div>
+        <div class="brand-text">Nexa<span>Hire</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <div class="user-mini">
+          <div class="avatar" id="user-initials">U</div>
+          <div style="flex:1;overflow:hidden;">
+            <div class="text-sm text-bold" id="user-full-name">User Name</div>
+            <span class="badge badge-primary text-xs" id="user-role-badge">ROLE</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <h3>Recruitment Funnel &amp; Hiring Analytics</h3>
+        <button class="btn btn-secondary btn-sm" onclick="handleLogout()">Sign Out</button>
+      </header>
+
+      <div class="page-body">
+        <!-- KPI Row -->
+        <div class="grid grid-4 gap-4 mb-6" id="analytics-kpis">
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Active Requisitions</div>
+              <div class="stat-val" id="kpi-jobs">-</div>
+            </div>
+            <div class="stat-icon">💼</div>
+          </div>
+          <div class="stat-card stat-navy">
+            <div>
+              <div class="stat-label">Total Applications</div>
+              <div class="stat-val" id="kpi-apps">-</div>
+            </div>
+            <div class="stat-icon">📈</div>
+          </div>
+          <div class="stat-card stat-warning">
+            <div>
+              <div class="stat-label">Shortlisted Candidates</div>
+              <div class="stat-val" id="kpi-shortlisted">-</div>
+            </div>
+            <div class="stat-icon">🎯</div>
+          </div>
+          <div class="stat-card stat-success">
+            <div>
+              <div class="stat-label">Total Hired / Offers</div>
+              <div class="stat-val" id="kpi-hired">-</div>
+            </div>
+            <div class="stat-icon">🏆</div>
+          </div>
+        </div>
+
+        <div class="grid grid-2 gap-6 mb-6">
+          <!-- Recruitment Funnel Progression -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3>Recruitment Conversion Funnel</h3>
+                <p class="text-xs text-muted">Pipeline velocity from application submission to final offer</p>
+              </div>
+              <span class="badge badge-primary">Stage Metrics</span>
+            </div>
+
+            <div id="funnel-container" class="mt-4">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Applications by Department Breakdown -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3>Requisition Volume by Department</h3>
+                <p class="text-xs text-muted">Application distribution across business business units</p>
+              </div>
+              <span class="badge badge-navy">Distribution</span>
+            </div>
+
+            <div id="department-chart" class="mt-4">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Hiring Velocity Table -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Talent Acquisition Benchmark Insights</h3>
+            <span class="badge badge-success">Enterprise SLA: Healthy</span>
+          </div>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Recruitment Dimension</th>
+                  <th>Current Metric</th>
+                  <th>Industry Standard Benchmark</th>
+                  <th>Evaluation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-bold">Screening Conversion Rate</td>
+                  <td id="metric-screening-rate">Calculating...</td>
+                  <td>20% - 30%</td>
+                  <td><span class="badge badge-success">Optimal</span></td>
+                </tr>
+                <tr>
+                  <td class="text-bold">Interview-to-Offer Conversion</td>
+                  <td id="metric-interview-rate">Calculating...</td>
+                  <td>15% - 25%</td>
+                  <td><span class="badge badge-success">Strong Quality</span></td>
+                </tr>
+                <tr>
+                  <td class="text-bold">Resume Keyword Parsing Accuracy</td>
+                  <td>98.5%</td>
+                  <td>90% - 95%</td>
+                  <td><span class="badge badge-primary">Transparent Algorithm</span></td>
+                </tr>
+                <tr>
+                  <td class="text-bold">Average Candidate Time-in-Stage</td>
+                  <td>2.4 Days</td>
+                  <td>3 - 5 Days</td>
+                  <td><span class="badge badge-success">Fast-Track</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/analytics.js"></script>
+</body>
+</html>
